@@ -1,23 +1,42 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Your photos. Your coast. An offline cover art studio.">
+<title>Neon Tide — Cover Studio</title><link rel="icon" href="data:,">
 <link rel="stylesheet" href="./style.css">
+<script defer src="./fonts/data.min.js"></script><script defer src="./samples/data.min.js"></script><script defer src="./src/cover.js"></script><script defer src="./src/shots.js"></script><script defer src="./src/main.js"></script>
 </head>
 <body>
-<main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
-  </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
+<header class="masthead"><a class="wordmark" href="./index.html"><span class="brand-mark">NT</span><span>NEON TIDE<small>COVER STUDIO</small></span></a><div class="mast-note">EVERY COAST HAS A STORY.<br><strong>MAKE YOURS THE COVER.</strong></div><span class="offline"><i></i> OFFLINE BY DESIGN</span></header>
+<main class="studio-shell">
+<aside class="controls" aria-label="Cover controls">
+<div class="control-heading"><div><span class="eyebrow">THE DIRECTOR'S CUT</span><h1>Make a scene.</h1></div><button id="undo" class="quiet" title="Undo last edit (Ctrl+Z)" disabled>↶ Undo</button></div>
+<section><div class="section-title"><h2><b>01</b> Your cast</h2><span>STAYS ON YOUR DEVICE</span></div>
+<label class="dropzone" id="dropzone" for="photo"><span class="upload-icon">＋</span><strong>Add your photos</strong><small>Drop images here or click to browse</small><input id="photo" type="file" accept="image/*" multiple></label>
+<div class="photo-library" id="photo-library" aria-label="Photo library"></div><p class="micro">Select a panel, then a photo to swap it.</p>
+<div class="crop-row"><div class="panel-picker" id="panel-picker" aria-label="Select panel"></div><button class="text-button" id="reset-crop">Reset crop</button></div>
+<label class="range-label" for="zoom">Zoom <input id="zoom" type="range" min="1" max="3" step="0.01" value="1"><output id="zoom-value">1.00×</output></label>
+<div class="focus-controls"><label for="focus-x">Horizontal <input id="focus-x" type="range" min="0" max="1" step="0.01" value="0.5"></label><label for="focus-y">Vertical <input id="focus-y" type="range" min="0" max="1" step="0.01" value="0.4"></label></div>
+</section>
+<section><div class="section-title"><h2><b>02</b> The story</h2><span>WRITE YOUR OWN</span></div>
+<div class="two-inputs"><label for="caption">Cover title<input id="caption" maxlength="70" value="VICE COAST" spellcheck="false"></label><label for="subtitle">Signature<input id="subtitle" maxlength="50" value="Neon Tide" spellcheck="false"></label></div>
+<label for="tagline">Tagline<input id="tagline" maxlength="120" value="ONE COAST  •  NO RULES  •  COMING SOON"></label>
+<label for="quote">The review<input id="quote" maxlength="100" value="“A FEVER DREAM IN NEON” — COAST HERALD"></label>
+</section>
+<section><div class="section-title"><h2><b>03</b> Art direction</h2><span>MAKE IT YOURS</span></div>
+<div class="layout-picker" id="layouts"><button data-layout="keyart" class="active"><i class="layout-icon keyart"></i>Key Art</button><button data-layout="triple"><i class="layout-icon triple"></i>Triple</button><button data-layout="poster"><i class="layout-icon poster"></i>Poster</button></div>
+<div class="grade-picker" id="grades"><button data-grade="sunset" class="active"><i class="swatch sunset"></i>Sunset</button><button data-grade="neon"><i class="swatch neon"></i>Neon Night</button><button data-grade="golden"><i class="swatch golden"></i>Golden</button><button data-grade="teal"><i class="swatch teal"></i>Teal</button></div>
+<div class="toggles"><label><input type="checkbox" id="grain" checked>Film grain</label><label><input type="checkbox" id="seal" checked>Art seal</label><label><input type="checkbox" id="review" checked>Review strip</label><label><input type="checkbox" id="footer" checked>Coast footer</label></div>
+</section>
+<div class="sidebar-bottom">ORIGINAL PHOTOS. ORIGINAL COVER. <span>NO UPLOADS. EVER.</span></div>
+</aside>
+<section class="workspace" aria-label="Live cover preview">
+<div class="preview-bar"><div><i class="live-dot"></i> LIVE PREVIEW <span id="preview-size">1080 × 1350</span></div><div class="aspect-picker" id="aspects"><button data-size="1080,1350" class="active" title="Portrait">4:5</button><button data-size="1080,1080" title="Square">1:1</button><button data-size="1920,1080" title="Landscape">16:9</button></div></div>
+<div class="canvas-stage"><div class="cover-mount"><canvas id="cover" width="1080" height="1350" aria-label="Your cover art. Drag a photo panel to reposition its crop." tabindex="0"></canvas></div></div>
+<div class="preview-hint"><span>↔ &nbsp; Drag any photo panel to find your frame.</span><span>YOUR PHOTO. MAIN CHARACTER ENERGY.</span></div>
+<div class="export-bar"><div><span class="eyebrow">READY FOR THE SPOTLIGHT</span><h2>Take it to the coast.</h2><p id="status" role="status">Loading your cover…</p></div><div class="export-buttons"><button data-export="1080,1080"><strong>Square ↗</strong><small>1080 × 1080</small></button><button class="primary" data-export="1080,1350"><strong>Export portrait ↓</strong><small>1080 × 1350 · PNG</small></button><button data-export="1920,1080"><strong>Landscape ↗</strong><small>1920 × 1080</small></button></div></div>
+</section>
 </main>
-<script type="module" src="./src/main.js"></script>
-</body>
-</html>
+</body></html>
+
