@@ -1,29 +1,40 @@
-// Package Vice Coast Cover Studio and its gallery of Chrome captures.
-// Use MAKEFUN_OUTPUT_DIR=out for a local package, or node serve.ts to preview.
-
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+// Package the entry for make.fun: `MAKEFUN_OUTPUT_DIR=out node main.ts`.
+import { cpSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
 
-const entryRoot = fileURLToPath(new URL('.', import.meta.url));
-const outputRoot = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
-const gallerySource = join(entryRoot, 'screenshots');
-const galleryOutput = join(outputRoot, 'screenshots');
+const root = fileURLToPath(new URL('.', import.meta.url));
+const output = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const sourceScreenshots = join(root, 'screenshots');
 
-mkdirSync(outputRoot, { recursive: true });
-cpSync(join(entryRoot, 'app'), join(outputRoot, 'app'), { recursive: true });
-mkdirSync(galleryOutput, { recursive: true });
-if (existsSync(gallerySource)) cpSync(gallerySource, galleryOutput, { recursive: true });
+function countImages(directory: string): number {
+  let count = 0;
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue;
+    const path = join(directory, entry.name);
+    const stats = statSync(path);
+    if (stats.isDirectory()) count += countImages(path);
+    else if (stats.isFile() && /\.(?:png|jpe?g)$/i.test(entry.name)) count++;
+  }
+  return count;
+}
 
-// Keep the grader's entry limits unchanged.
-writeFileSync(
-  join(outputRoot, 'dossier.json'),
-  buildDossier(outputRoot, {
-    text_max_bytes: 163840,
-    screenshots: { max: 4, max_bytes: 262144 },
-    app_max_files: 993,
-    app_max_bytes: 50331648,
-    app_path_max_bytes: 1000,
-  }),
-);
+mkdirSync(output, { recursive: true });
+cpSync(join(root, 'app'), join(output, 'app'), { recursive: true });
+
+let screenshotCount = 0;
+if (existsSync(sourceScreenshots)) {
+  cpSync(sourceScreenshots, join(output, 'screenshots'), { recursive: true });
+  screenshotCount = countImages(join(output, 'screenshots'));
+}
+
+const dossier = buildDossier(output, {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 50331648,
+  app_path_max_bytes: 1000,
+});
+writeFileSync(join(output, 'dossier.json'), dossier);
+console.log(`Copied ${screenshotCount} screenshots; dossier ${dossier.byteLength} bytes`);

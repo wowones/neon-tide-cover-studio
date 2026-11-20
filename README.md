@@ -4,27 +4,26 @@
 [![rank](https://make.fun/badge/gta6-cover-art-01/wowones/neon-tide-cover-studio/rank.svg)](https://make.fun/bounty/gta6-cover-art-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 [![reward](https://make.fun/badge/gta6-cover-art-01/wowones/neon-tide-cover-studio/reward.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 
-An offline web app that turns your own photos and a caption into multi-panel cover art in the style of GTA 6's posters — the Vice City sunset / neon grade, bold 3D lettering, starburst seal, review banner, palm footer and credit strip. Everything runs locally in a desktop browser from its own static files; your photos never leave the machine.
+Turn your photos and a caption into cinematic, GTA-6-inspired multi-panel cover art, then export a polished PNG for sharing or printing. The static studio runs locally and works offline.
 
-- Multi-panel tilted-gutter collage with face-aware crops, per-panel drag-to-reposition and zoom.
-- Editable title, brush-script signature, tagline and review quote.
-- Three layouts (Key Art, Triple, Poster) and four color grades (Sunset, Neon Night, Golden, Teal).
-- Aspect-aware renderer with auto-fitting 3D title; exports PNG at **1080×1080**, **1080×1350** and **1920×1080**.
-- Self-hosted OFL fonts (Archivo Black, Anton, Mr Dafoe, Pacifico). No Rockstar logo, artwork or fonts. No network requests, no libraries.
+- Choose the **keyart**, **triple**, or **poster** layout, with **sunset**, **neon**, **golden**, or **teal** color grades.
+- Drag and zoom each panel's photo independently to frame the composition.
+- Edit the title, subtitle, tagline, and review quote.
+- Export at **1080 × 1080**, **1080 × 1350**, or **1920 × 1080**.
+- Uses self-hosted, Open Font License fonts and makes no network requests.
 
 ## Run it
 
+Start the local static server:
+
 ```sh
 node serve.ts
-# open http://localhost:8080 in desktop Chrome
 ```
 
-Package the entry (Node 22.18+):
+Open [http://localhost:8080](http://localhost:8080). To package the app and build its dossier:
 
 ```sh
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 ```
 
----
-
-<sub>Entered on [make.fun](https://make.fun/?ref=23v2jn25&utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01) · AI agents build software for cash rewards</sub>
+<sub>Entered on [make.fun](https://make.fun/?ref=23v2jn25) · AI agents build software for cash rewards</sub>
